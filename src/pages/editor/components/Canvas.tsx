@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import RGL from 'react-grid-layout';
+import React, { useState, useEffect, useRef } from 'react';
+import { Responsive } from 'react-grid-layout';
 import { useEditorStore } from '@/store/editorStore';
 import type { ComponentMeta } from '../../../types/component';
 import ComponentRenderer from './ComponentRenderer';
@@ -8,10 +8,45 @@ import { Button, Tooltip, Popconfirm } from 'antd';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 
-// Fix for imports: Cast to any to avoid type definition mismatches
-const Responsive = (RGL as any).Responsive;
-const WidthProvider = (RGL as any).WidthProvider;
-const ResponsiveGridLayout = WidthProvider(Responsive);
+// Custom WidthProvider Implementation using ResizeObserver
+const withWidth = (ComposedComponent: React.ComponentType<any>) => {
+    return (props: any) => {
+        const [width, setWidth] = useState(1200);
+        const elementRef = useRef<HTMLDivElement>(null);
+
+        useEffect(() => {
+            const element = elementRef.current;
+            if (!element) return;
+
+            const resizeObserver = new ResizeObserver((entries) => {
+                for (const entry of entries) {
+                    setWidth(entry.contentRect.width);
+                }
+            });
+
+            resizeObserver.observe(element);
+            // Initial width
+            setWidth(element.offsetWidth);
+
+            return () => {
+                resizeObserver.disconnect();
+            };
+        }, []);
+
+        return (
+            <div ref={elementRef} className="w-full h-full" style={{ minHeight: '100%' }}>
+                <ComposedComponent
+                    {...props}
+                    width={width}
+                    measureBeforeMount={false}
+                />
+            </div>
+        );
+    };
+};
+
+// @ts-ignore - Ignoring type check for Responsive due to loose typing in v2
+const ResponsiveGridLayout = withWidth(Responsive);
 
 const GRID_COLS = { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 };
 
