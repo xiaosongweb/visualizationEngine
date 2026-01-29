@@ -18,7 +18,13 @@ const ComponentLibrary: React.FC = () => {
             id: uuidv4(),
             type,
             name,
-            layout: { x: 50, y: 50, w: 400, h: 300, zIndex: 1 },
+            layout: {
+                x: 0,
+                y: Infinity, // Put it at the bottom
+                w: 6,
+                h: 4,
+                zIndex: 1
+            },
             style: {},
             data: {
                 sourceType: 'static',
