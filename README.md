@@ -36,17 +36,18 @@ npm run build
 visualizationEngine/
 ├── src/                # 源代码目录
 │   ├── assets/         # 静态资源 (图片等)
-│   ├── App.css         # App 组件样式
+│   ├── App.less        # App 组件样式 (Less)
 │   ├── App.tsx         # 根组件
-│   ├── index.css       # 全局样式
+│   ├── index.less      # 全局样式 (Less + Tailwind 指令)
 │   ├── main.tsx        # 入口文件
 │   └── vite-env.d.ts   # Vite 类型定义
 ├── public/             # 纯静态资源 (不经过打包处理)
 ├── index.html          # HTML 模板
 ├── package.json        # 项目配置与依赖
+├── postcss.config.js   # PostCSS 配置
+├── tailwind.config.js  # TailwindCSS 配置
 ├── tsconfig.json       # TypeScript 配置
 ├── tsconfig.app.json   # App 专用 TS 配置
-├── tsconfig.node.json  # Node 相关 TS 配置
 └── vite.config.ts      # Vite 构建配置
 ```
 
